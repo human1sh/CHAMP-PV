@@ -1,0 +1,11 @@
+# Custom Project Exclusions
+data/
+output/
+notebook.ipynb
+notebook.py
+*.ipynb
+.ipynb_checkpoints/
+readme.md
+
+# IDE & Editor Configurations
+.vscode/
