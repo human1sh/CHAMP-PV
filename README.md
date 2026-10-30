@@ -4,7 +4,7 @@ A hybrid deep learning and physics-constrained modeling framework designed to pr
 
 ## Project Overview
 
-Standard data-driven models (e.g., Gradient Boosted Trees, MLPs) often fail to extrapolate when predicting performance decay for solar panels older than those seen in the training distribution. This repository implements a **Physics-Constrained Hybrid Neural Network (PCHNN)** that combines an algebraic physics backbone with a bounded neural network residual correction and an autograd monotonicity penalty ($\frac{dPR}{d\text{age}} \le 0$).
+Standard data-driven models (e.g., Gradient Boosted Trees, MLPs) often fail to extrapolate when predicting performance decay for solar panels older than those seen in the training distribution. This repository implements a **Physics-Constrained Hybrid Neural Network (PCHNN)** that combines an algebraic physics backbone with a bounded neural network residual correction and an autograd monotonicity penalty ($dPR/d\text{age} \le 0$).
 
 ### Key Equation
 
