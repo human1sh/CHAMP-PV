@@ -8,7 +8,7 @@ Standard data-driven models (e.g., Gradient Boosted Trees, MLPs) often fail to e
 
 ### Key Equation
 
-$$\text{PR} = \eta_{\text{system}} \cdot \left[1 + \gamma (T_{\text{cell}} - 25)\right] \cdot (1 - d_{\text{tech}} \cdot \text{age}) \cdot (1 - \text{soiling}) \cdot \text{low\_light} \cdot \left(1 + 0.25 \cdot \tanh(\text{NN}(x))\right)$$
+$$\text{PR} = \eta_{\text{system}} \cdot \left[1 + \gamma (T_{\text{cell}} - 25)\right] \cdot (1 - d_{\text{tech}} \cdot \text{age}) \cdot (1 - \text{soiling}) \cdot \text{low}_{\text{light}} \cdot \left(1 + 0.25 \cdot \tanh(\text{NN}(x))\right)$$
 
 Where physical parameters ($\eta_{\text{system}}$, $d_{\text{tech}}$, $\gamma$, $T_{\text{cell}}$, soiling, low-light attenuation) are learnable parameters bounded by domain physics.
 
