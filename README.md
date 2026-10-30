@@ -43,7 +43,7 @@ Scales the temperature coefficient relative to Standard Test Conditions ($25 \ ^
 
 #### 5. Soiling Accumulation Model ($\text{soil}$)
 
-$$\text{soil} = a_0 \cdot \left(\frac{\text{PM}_{10}}{50}\right) \cdot \min\left(\frac{\text{days\_since\_rain}}{30}, 1.0\right) + a_1 \cdot \min\left(\frac{\text{days\_since\_cleaning}}{365}, 1.0\right)$$
+$$\text{soil} = a_0 \cdot \left(\frac{\text{PM}_{10}}{50}\right) \cdot \min\left(\frac{\text{days}_{\text{since\_rain}}}{30}, 1.0\right) + a_1 \cdot \min\left(\frac{\text{days}_{\text{since\_cleaning}}}{365}, 1.0\right)$$
 
 Captures particulate pollution accumulation and washout dynamics.
 
