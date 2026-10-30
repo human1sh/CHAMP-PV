@@ -14,26 +14,50 @@ Rather than treating PR prediction as an unconstrained black-box regression task
 
 $$\text{PR} = \eta_{\text{system}} \cdot \left[1 + \gamma \cdot (T_{\text{cell}} - 25)\right] \cdot (1 - d_{\text{tech}} \cdot \text{age}) \cdot (1 - \text{soiling}) \cdot \text{low}_{\text{light}} \cdot \left[1 + 0.25 \cdot \tanh(\text{NN}(x))\right]$$
 
-### Sub-Component Equations:
-1. **Per-System Baseline Efficiency ($\eta_{\text{system}}$):**  
-   $$\eta = 0.3 + \text{sigmoid}(\eta_{\text{raw}})$$  
-   *Bounds efficiency between 0.3 and 1.3 across systems. Around 60% of PR variance sits between systems, making this per-system parameter essential.*
-2. **Per-Technology Degradation Rate ($d_{\text{tech}}$):**  
-   $$d_{\text{tec}} = 0.03 \cdot \text{sigmoid}(d_{\text{raw}})$$  
-   *Enforces degradation bounds between $0\%$ and $3\%$/year per panel technology.*
-3. **Cell Temperature Model ($T_{\text{cell}}$):**  
-   $$T_{\text{cell}} = T_{\text{mean}} + \beta \cdot (T_{\text{max}} - T_{\text{mean}}) + k \cdot G$$  
-   *Where $\beta = 1.5 \cdot \text{sigmoid}(\beta_{\text{raw}})$ blends mean and max ambient temperatures, and $k = 0.2 \cdot \text{sigmoid}(k_{\text{raw}})$ models irradiance-driven heating ($\sim 0.04 \ ^\circ\text{C}$ per $\text{W/m}^2$).*
-4. **Temperature Correction Factor:**  
-   $$\text{temp} = 1 + \text{softplus}(\gamma_{\text{raw}}) \cdot \gamma_0 \cdot (T_{\text{cell}} - 25.0)$$  
-   *Scales temperature coefficient relative to Standard Test Conditions ($25 \ ^\circ\text{C}$).*
-5. **Soiling Accumulation Model:**  
-   $$\text{soil} = a_0 \cdot \left(\frac{\text{PM}_{10}}{50}\right) \cdot \min\left(\frac{\text{days\_since\_rain}}{30}, 1.0\right) + a_1 \cdot \min\left(\frac{\text{days\_since\_cleaning}}{365}, 1.0\right)$$  
-   *Captures particulate pollution accumulation and washout dynamics.*
-6. **Low-Light Attenuation:**  
-   $$\text{low}_{\text{light}} = 1 - 0.5 \cdot \text{sigmoid}(ll_{\text{raw}}) \cdot \exp\left(-\frac{G}{150}\right)$$
-7. **Bounded Neural Residual Correction:**  
-   The neural network operates as a small residual multiplier bounded to $\pm25\%$ via $0.25 \cdot \tanh(\text{NN}(x))$, ensuring it refines physics predictions without overriding foundational physical constraints.
+### Sub-Component Equations
+
+#### 1. Per-System Baseline Efficiency ($\eta_{\text{system}}$)
+
+$$\eta_{\text{system}} = 0.3 + \text{sigmoid}(\eta_{\text{raw}})$$
+
+Bounds system efficiency between $0.3$ and $1.3$. Around 60% of Performance Ratio (PR) variance sits between systems, making this per-system parameter essential.
+
+#### 2. Per-Technology Degradation Rate ($d_{\text{tech}}$)
+
+$$d_{\text{tech}} = 0.03 \cdot \text{sigmoid}(d_{\text{raw}})$$
+
+Enforces degradation bounds between $0\%$ and $3\%/\text{year}$ per panel technology.
+
+#### 3. Cell Temperature Model ($T_{\text{cell}}$)
+
+$$T_{\text{cell}} = T_{\text{mean}} + \beta \cdot (T_{\text{max}} - T_{\text{mean}}) + k \cdot G$$
+
+* $\beta = 1.5 \cdot \text{sigmoid}(\beta_{\text{raw}})$ blends mean and maximum ambient temperatures.
+* $k = 0.2 \cdot \text{sigmoid}(k_{\text{raw}})$ models irradiance-driven heating ($\sim 0.04 \ ^\circ\text{C}$ per $\text{W/m}^2$).
+
+#### 4. Temperature Correction Factor ($\text{temp}$)
+
+$$\text{temp} = 1 + \text{softplus}(\gamma_{\text{raw}}) \cdot \gamma_0 \cdot (T_{\text{cell}} - 25.0)$$
+
+Scales the temperature coefficient relative to Standard Test Conditions ($25 \ ^\circ\text{C}$).
+
+#### 5. Soiling Accumulation Model ($\text{soil}$)
+
+$$\text{soil} = a_0 \cdot \left(\frac{\text{PM}_{10}}{50}\right) \cdot \min\left(\frac{\text{days\_since\_rain}}{30}, 1.0\right) + a_1 \cdot \min\left(\frac{\text{days\_since\_cleaning}}{365}, 1.0\right)$$
+
+Captures particulate pollution accumulation and washout dynamics.
+
+#### 6. Low-Light Attenuation ($\text{low}_{\text{light}}$)
+
+$$\text{low}_{\text{light}} = 1 - 0.5 \cdot \text{sigmoid}(ll_{\text{raw}}) \cdot \exp\left(-\frac{G}{150}\right)$$
+
+Models efficiency loss under low solar irradiance conditions.
+
+#### 7. Bounded Neural Residual Correction
+
+$$\text{residual} = 1 + 0.25 \cdot \tanh(\text{NN}(x))$$
+
+The neural network operates as a small residual multiplier bounded to $\pm 25\%$ via $0.25 \cdot \tanh(\text{NN}(x))$, ensuring it refines physics predictions without overriding foundational physical constraints.
 
 ---
 
